@@ -1,9 +1,11 @@
 # Create an EC2 instance
 resource "aws_instance" "web" {
+  for_each = toset(var.subnets)
   ami           = data.aws_ami.specific_ami.id
   instance_type = var.instance_type
 
-  subnet_id     = var.subnets
+  subnet_id     = each.value
+
   vpc_security_group_ids = var.securitygroups
   #security_groups = var.securitygroups
   #user_data = file("${path.module}/test.sh")
@@ -26,7 +28,7 @@ data "aws_ami" "specific_ami" {
 }
 
 output "instance" {
-  value = aws_instance.web.id
+  value = aws_instance.web.*.id
 }
 output "ami_id" {
   value = data.aws_ami.specific_ami.id

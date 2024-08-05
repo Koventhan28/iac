@@ -4,7 +4,7 @@ variable "instance_type" {
 }
 
 variable "subnets" {
-  type = string
+ type = list(string)
 }
 
 variable "securitygroups" {
