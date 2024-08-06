@@ -10,7 +10,6 @@ resource "aws_instance" "web" {
   #security_groups = var.securitygroups
   #user_data = file("${path.module}/test.sh")
   #user_data = file("./test.sh")
-  
   tags = {
     Name = "WebServerInstance"
   }
@@ -26,10 +25,11 @@ data "aws_ami" "specific_ami" {
 
   most_recent = true
 }
-
+/*
 output "instance" {
-  value = aws_instance.web.*.id
+  value = aws_instance.web[*].name
 }
+*/
 output "ami_id" {
   value = data.aws_ami.specific_ami.id
 }
