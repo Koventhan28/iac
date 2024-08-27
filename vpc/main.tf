@@ -1,39 +1,29 @@
-provider "aws" {
-  region = var.location
-}
+
 
 resource "aws_vpc" "this" {
-  cidr_block = var.cidr
-enable_dns_support = true
+  cidr_block           = var.main_cidr
   enable_dns_hostnames = true
-
-  tags = {
-    Name = "Project VPC"
-  }
+  enable_dns_support   = true
 }
 data "aws_availability_zones" "available" {
   state = "available"
 }
-
 resource "aws_subnet" "public" {
-  count             = length(data.aws_availability_zones.available.names)
   vpc_id            = aws_vpc.this.id
-  cidr_block        = "10.0.${count.index + 1}.0/24"
+  count             = length(var.public_subnets)
+  cidr_block = var.public_subnets[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
-depends_on = [ aws_vpc.this ]
   tags = {
     Name = "public-subnet-${count.index}"
   }
+
 }
 
-
-# Create Private Subnets in each availability zone
 resource "aws_subnet" "private" {
-  count             = length(data.aws_availability_zones.available.names)
   vpc_id            = aws_vpc.this.id
-  cidr_block        = "10.0.${count.index + 101}.0/24"
+  count             = length(var.private_subnets)
+  cidr_block = var.private_subnets[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
-depends_on = [ aws_subnet.public ]
   tags = {
     Name = "private-subnet-${count.index}"
   }
@@ -41,8 +31,8 @@ depends_on = [ aws_subnet.public ]
 
 # Create Public Route Table
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
-depends_on = [ aws_subnet.public ]
+  vpc_id     = aws_vpc.this.id
+  depends_on = [aws_subnet.public]
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
@@ -53,34 +43,35 @@ depends_on = [ aws_subnet.public ]
   }
 }
 
+
 # Create Private Route Table (with no routes to the Internet)
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.this.id
-depends_on = [ aws_subnet.private ]
+  vpc_id     = aws_vpc.this.id
+  depends_on = [aws_subnet.private]
   tags = {
     Name = "private-route-table"
   }
 }
 
+
 # Associate Public Subnets with Public Route Table
 resource "aws_route_table_association" "public" {
-  count          = length(data.aws_availability_zones.available.names)
+  count          = length(var.public_subnets)
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
- depends_on = [ aws_route_table.public ]
+  depends_on     = [aws_route_table.public]
 }
-
 # Associate Private Subnets with Private Route Table
 resource "aws_route_table_association" "private" {
-  count          = length(data.aws_availability_zones.available.names)
+  count          = length(var.private_subnets)
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
-depends_on = [ aws_route_table.private ]
+  depends_on     = [aws_route_table.private]
 }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.this.id
-depends_on = [ aws_route_table.private ]
+  vpc_id     = aws_vpc.this.id
+  depends_on = [aws_route_table.private]
   tags = {
     Name = "igw"
   }
@@ -89,8 +80,8 @@ depends_on = [ aws_route_table.private ]
 
 # Create a security group
 resource "aws_security_group" "main" {
-  vpc_id = aws_vpc.this.id
-depends_on = [ aws_route_table.private ]
+  vpc_id     = aws_vpc.this.id
+  depends_on = [aws_route_table.private]
   ingress {
     from_port   = 80
     to_port     = 80

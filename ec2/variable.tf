@@ -1,17 +1,16 @@
-variable "instance_type" {
-    default = "t2.micro"
-  
-}
 
-variable "subnets" {
- type = list(string)
+variable "instance_type" {
+
+}
+variable "number_instances" {
+
 }
 
 variable "securitygroups" {
- # type = list(string)
+  # type = list(string)
 }
-/*
-variable "ami_id" {
-  type = string
+
+variable "public_subnets" {
+
 }
-*/
+
