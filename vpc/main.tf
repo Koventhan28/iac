@@ -8,11 +8,16 @@ resource "aws_vpc" "this" {
 data "aws_availability_zones" "available" {
   state = "available"
 }
+resource "random_shuffle" "az" {
+  input        = data.aws_availability_zones.available.names
+  result_count = var.max_subnets
+
+}
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.this.id
-  count             = length(var.public_subnets)
-  cidr_block = var.public_subnets[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  count             = var.public_subnets_sn
+  cidr_block        = var.public_subnets[count.index]
+  availability_zone = random_shuffle.az.result[count.index]
   tags = {
     Name = "public-subnet-${count.index}"
   }
@@ -21,9 +26,9 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.this.id
-  count             = length(var.private_subnets)
-  cidr_block = var.private_subnets[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  count             = var.private_subnets_sn
+  cidr_block        = var.private_subnets[count.index]
+  availability_zone = random_shuffle.az.result[count.index]
   tags = {
     Name = "private-subnet-${count.index}"
   }
@@ -56,14 +61,14 @@ resource "aws_route_table" "private" {
 
 # Associate Public Subnets with Public Route Table
 resource "aws_route_table_association" "public" {
-  count          = length(var.public_subnets)
+  count          = var.public_subnets_sn
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
   depends_on     = [aws_route_table.public]
 }
 # Associate Private Subnets with Private Route Table
 resource "aws_route_table_association" "private" {
-  count          = length(var.private_subnets)
+  count          = var.private_subnets_sn
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
   depends_on     = [aws_route_table.private]
