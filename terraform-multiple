@@ -1,0 +1,45 @@
+https://stackoverflow.com/questions/66024950/how-to-organize-terraform-modules-for-multiple-environments
+
+https://stackoverflow.com/questions/68646405/terraform-and-gitlab-ci-pipeline-for-multiple-projects
+
+https://stackoverflow.com/questions/76332075/ci-cd-deployment-of-the-same-terraform-module-for-multiple-organizational-teams
+	
+	https://stackoverflow.com/questions/52206436/deploying-to-multiple-aws-accounts-with-terraform
+	
+	https://freedium.cfd/https://medium.com/the-kickstarter/deploying-a-gitlab-ci-cd-runner-on-kubernetes-a-step-by-step-guide-328dcb6ef5f9
+	
+	https://freedium.cfd/https://medium.com/@adnanturgayaydin/building-a-real-time-ci-cd-pipeline-step-by-step-guide-for-microservices-projects-dd2dcb2fb96d
+	
+	https://www.reddit.com/r/Terraform/comments/wrc8rj/assume_a_role_in_one_account_to_assume_another/
+	
+	https://developer.hashicorp.com/terraform/language/backend/s3#multi-account-aws-architecture
+	
+	
+	https://www.reddit.com/r/Terraform/comments/11ry6wi/authenticating_to_multiple_aws_accounts_for/
+	
+	https://www.reddit.com/r/gitlab/comments/lya2na/im_trying_to_set_up_cd_pipeline_in_gitlab_to_run/
+	
+	https://www.reddit.com/r/Terraform/comments/1b6e2pk/terraform_with_multiaccount_aws/
+	
+	
+	https://www.reddit.com/r/Terraform/comments/13r9pgb/using_terraform_with_multiple_aws_accounts_and_a/
+	
+	
+	https://www.reddit.com/r/Terraform/comments/uk35oa/best_practice_for_structuring_terraform_repo_for/
+	
+	
+	https://www.reddit.com/r/Terraform/comments/11ry6wi/authenticating_to_multiple_aws_accounts_for/
+	
+	https://guicommits.com/why-use-aws-organizations-with-terraform/
+	
+	https://www.reddit.com/r/devops/comments/r8qkch/automating_aws_organizations_best_practices/
+	
+	https://blog.terraforge.io/posts/terraform-gitlab-ci-cd-pipeline/
+	
+	https://blog.terraforge.io/posts/01-gitflow-aws-accounts/
+	
+	https://medium.com/@b0ld8/terraform-manage-multiple-environments-63939f41c454
+	
+	
+	
+	
